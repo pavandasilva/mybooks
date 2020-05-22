@@ -22,6 +22,14 @@ export default createGlobalStyle`
     align-items: center;
   }
 
+  input {
+    border-radius: 24px;
+    border: none;
+    padding: 0;
+    background: none;
+    height: 35px;
+  }
+
   button {
     cursor: pointer;
     border: none;

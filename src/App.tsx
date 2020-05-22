@@ -6,7 +6,7 @@ import Routes from './routes';
 import Header from './components/Header';
 import SubHeader from './components/SubHeader';
 
-import { Container } from './styles/Container';
+import { Container } from './styles/styles';
 
 const App: React.FC = () => (
   <>

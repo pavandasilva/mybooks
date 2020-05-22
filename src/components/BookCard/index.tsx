@@ -21,7 +21,6 @@ const BookCard: React.FC = () => {
           também o papel de narrador, contando sobre o fatídico dia em que o seu
           avião teria caído no meio do deserto do Saara. ...
         </p>
-
         <Label>
           <span>desejo</span>
         </Label>
