@@ -13,7 +13,7 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
-    color: #3e3e3e;
+    color: #676767;
   }
 
   #root {
@@ -24,5 +24,8 @@ export default createGlobalStyle`
 
   button {
     cursor: pointer;
+    border: none;
+    padding: 0;
+    background: none;
   }
 `;
