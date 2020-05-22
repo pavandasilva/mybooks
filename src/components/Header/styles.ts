@@ -6,7 +6,7 @@ export const Container = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 75px;
-  padding: 0px 75px;
+  padding: 0px 70px;
   background-image: linear-gradient(180deg, #ee4455 0%, #f15f4a 100%);
   border-bottom-left-radius: 60px;
   border-bottom-right-radius: 60px;
