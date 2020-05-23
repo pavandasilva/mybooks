@@ -1,49 +1,115 @@
-import React from 'react';
-
+import React, { useRef } from 'react';
 import { FaTimes } from 'react-icons/fa';
+import { Form } from '@unform/web';
+import { SubmitHandler, FormHandles } from '@unform/core';
+import * as Yup from 'yup';
+
+import IsValidImageUrl from '../../helpers/isValidImageUrl';
+
+import { Input, Select, TextArea } from '../Form';
 
 import {
   Container,
   BasicFields,
   LeftContent,
   RightContent,
-  TextArea,
   BottomContent,
-  Select,
   Controllers,
 } from './styles';
 
 import { ModalOverlay, Close } from '../../styles/styles';
 
-const BookForm: React.FC = () => {
+interface BookRegisterProps {
+  dataToEdit?: BookForm;
+}
+
+interface BookForm {
+  title: string;
+  author: string;
+  description: string;
+  category?: string;
+  cover?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+const BookForm: React.FC<BookRegisterProps> = ({ dataToEdit }) => {
+  /* dataToEdit = {
+    title: 'teste',
+    author: 'author',
+    description: 'description',
+    cover: 'flflflflflflf',
+    createdAt: 'ssasa',
+    updatedAt: 'dsdds',
+  }; */
+
+  const selectOptions = [
+    { value: 'read', label: 'Lido' },
+    { value: 'reading', label: 'Lendo' },
+    { value: 'wantToRead', label: 'Quero ler' },
+  ];
+
+  const formRef = useRef<FormHandles>(null);
+
+  const handleFormSubmit: SubmitHandler<BookForm> = async (data, { reset }) => {
+    try {
+      const schema = Yup.object().shape({
+        title: Yup.string().required('O título é obrigatório'),
+        author: Yup.string().required('O autor é obrigatório'),
+        description: Yup.string().required('A descrição é obrigatória'),
+      });
+
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+
+      /* clear all form errors */
+      if (formRef.current) formRef.current.setErrors({});
+
+      /* clear form */
+      reset();
+    } catch (err) {
+      const validationErrors: any = {};
+
+      if (err instanceof Yup.ValidationError) {
+        err.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+        if (formRef.current !== null)
+          formRef.current.setErrors(validationErrors);
+      }
+    }
+  };
+
   return (
     <ModalOverlay>
       <Container>
         <Close>
           <FaTimes />
         </Close>
-        <h1>Cadastro de livro</h1>
-        <form action="">
+        <h1>
+          {dataToEdit ? 'Edição ' : 'Cadastro '}
+          de livro
+        </h1>
+        <Form
+          ref={formRef}
+          onSubmit={handleFormSubmit}
+          initialData={dataToEdit}
+        >
           <BasicFields>
             <LeftContent>
-              <label htmlFor="title">
-                Título:
-                <input type="text" id="title" placeholder="Informe um título" />
-              </label>
-              <label htmlFor="author">
-                Autor:
-                <input
-                  type="text"
-                  id="author"
-                  placeholder="Informe o autor do livro"
-                />
-              </label>
-              <label htmlFor="description">
-                Descrição:
-                <TextArea>
-                  <textarea rows={6} id="description" />
-                </TextArea>
-              </label>
+              <Input
+                name="title"
+                label="Título:"
+                placeholder="Informe o título do livro"
+              />
+              <Input
+                name="author"
+                label="Autor:"
+                placeholder="Informe o autor do livro"
+              />
+
+              <TextArea name="description" label="Descrição:" rows={4} />
             </LeftContent>
             <RightContent>
               <div>
@@ -56,32 +122,23 @@ const BookForm: React.FC = () => {
             </RightContent>
           </BasicFields>
           <BottomContent>
-            <label htmlFor="url">
-              Url da capa do livro:
-              <input
-                type="text"
-                id="url"
-                placeholder="Insira a URL da imagem"
-              />
-            </label>
-
-            <label htmlFor="category">
-              Categoria
-              <Select>
-                <select id="category">
-                  <option value="wanted">Desejado</option>
-                  <option value="read">Lido</option>
-                  <option value="reading">Lendo</option>
-                </select>
-              </Select>
-            </label>
+            <Input
+              name="cover"
+              label="URL da capa:"
+              placeholder="Insira uma URL de imagem para a capa do livro"
+            />
+            <Select
+              options={selectOptions}
+              name="category"
+              label="Categoria:"
+            />
           </BottomContent>
-        </form>
 
-        <Controllers>
-          <button type="button">CANCELAR</button>
-          <button type="button">SALVAR</button>
-        </Controllers>
+          <Controllers>
+            <button type="button">CANCELAR</button>
+            <button type="submit">SALVAR</button>
+          </Controllers>
+        </Form>
       </Container>
     </ModalOverlay>
   );

@@ -4,15 +4,15 @@ interface AlertModalStyledProps {
   type: string;
 }
 
-export const AlertBox = styled.div`
+export const AlertBox = styled.div<AlertModalStyledProps>`
   display: flex;
   overflow: hidden;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  background-color: ${(props: AlertModalStyledProps): string =>
-    props.type === 'success' ? '#3aba6f' : '#f58d37'};
+  background-color: ${({ type }) =>
+    type === 'success' ? '#3aba6f' : '#f58d37'};
 
   color: #fff;
   width: 450px;
