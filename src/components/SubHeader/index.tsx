@@ -1,15 +1,22 @@
 import React from 'react';
 import { FaSearch, FaPlus } from 'react-icons/fa';
 
-import AlertModal from '../AlertModal';
-import BookForm from '../BookForm';
+/* import AlertModal from '../AlertModal'; */
+import { useBookForm } from '../../hooks/bookForm';
 import { Container, BookActions, Search, BookRegister } from './styles';
 
 const SubHeader: React.FC = () => {
+  const { showBookForm } = useBookForm();
+
+  const handleBookRegisterClick = () => {
+    console.log('handleBookRegisterClick');
+    showBookForm();
+  };
+
   return (
     <Container>
       <BookActions>
-        <BookRegister>
+        <BookRegister onClick={handleBookRegisterClick}>
           <FaPlus />
           <span>CADASTRAR LIVRO</span>
         </BookRegister>
@@ -20,7 +27,7 @@ const SubHeader: React.FC = () => {
       </BookActions>
 
       {/*  <AlertModal type="warning" body="Livro removido com sucesso." /> */}
-      <BookForm />
+      {/* <BookForm /> */}
     </Container>
   );
 };

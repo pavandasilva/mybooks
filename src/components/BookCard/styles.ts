@@ -1,4 +1,20 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+interface LabelProps {
+  category?: 'read' | 'reading' | 'want_read';
+}
+
+const labelCategoryVariations = {
+  read: css`
+    background-color: blueviolet;
+  `,
+  reading: css`
+    background-color: blue;
+  `,
+  want_read: css`
+    background-color: red;
+  `,
+};
 
 export const Container = styled.div`
   display: flex;
@@ -65,7 +81,7 @@ export const RightContent = styled.div`
   }
 `;
 
-export const Label = styled.div`
+export const Label = styled.div<LabelProps>`
   display: flex;
   width: 70px;
   height: 16px;
@@ -73,7 +89,7 @@ export const Label = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 7px;
-  background-color: #ee4455;
+  ${(props) => labelCategoryVariations[props.category || 'read']};
   padding: 0;
 
   span {

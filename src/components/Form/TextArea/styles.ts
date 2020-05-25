@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-interface SelectStyleProps {
+interface ContainerStyled {
   error?: string;
 }
 
-export const Container = styled.div<SelectStyleProps>`
+export const Container = styled.div<ContainerStyled>`
   label {
     line-height: 25px;
     display: block;

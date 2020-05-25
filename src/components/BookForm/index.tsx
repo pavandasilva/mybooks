@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { Form } from '@unform/web';
 import { SubmitHandler, FormHandles } from '@unform/core';
@@ -7,6 +7,9 @@ import * as Yup from 'yup';
 import IsValidImageUrl from '../../helpers/isValidImageUrl';
 
 import { Input, Select, TextArea } from '../Form';
+import { useBook } from '../../hooks/book';
+import { useBookForm } from '../../hooks/bookForm';
+import { useAlert } from '../../hooks/alert';
 
 import {
   Container,
@@ -15,9 +18,10 @@ import {
   RightContent,
   BottomContent,
   Controllers,
+  Close,
 } from './styles';
 
-import { ModalOverlay, Close } from '../../styles/styles';
+import { ModalOverlay } from '../../styles/styles';
 
 interface BookRegisterProps {
   dataToEdit?: BookForm;
@@ -50,6 +54,9 @@ const BookForm: React.FC<BookRegisterProps> = ({ dataToEdit }) => {
   ];
 
   const formRef = useRef<FormHandles>(null);
+  const { insert } = useBook();
+  const { hideBookForm } = useBookForm();
+  const { showAlert } = useAlert();
 
   const handleFormSubmit: SubmitHandler<BookForm> = async (data, { reset }) => {
     try {
@@ -66,8 +73,18 @@ const BookForm: React.FC<BookRegisterProps> = ({ dataToEdit }) => {
       /* clear all form errors */
       if (formRef.current) formRef.current.setErrors({});
 
+      try {
+        insert(data);
+        reset();
+        showAlert({
+          type: 'success',
+          message: 'Livro cadastrado com sucesso.',
+        });
+      } catch (err) {
+        console.log(err);
+      }
+
       /* clear form */
-      reset();
     } catch (err) {
       const validationErrors: any = {};
 
@@ -84,7 +101,7 @@ const BookForm: React.FC<BookRegisterProps> = ({ dataToEdit }) => {
   return (
     <ModalOverlay>
       <Container>
-        <Close>
+        <Close onClick={hideBookForm}>
           <FaTimes />
         </Close>
         <h1>
@@ -135,7 +152,9 @@ const BookForm: React.FC<BookRegisterProps> = ({ dataToEdit }) => {
           </BottomContent>
 
           <Controllers>
-            <button type="button">CANCELAR</button>
+            <button type="button" onClick={hideBookForm}>
+              CANCELAR
+            </button>
             <button type="submit">SALVAR</button>
           </Controllers>
         </Form>
