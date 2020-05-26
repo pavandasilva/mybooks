@@ -1,6 +1,8 @@
 import React, { createContext, useCallback, useState, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
+import ListBooks from '../services/listBooks';
+
 interface BookState {
   id: string;
   title: string;
@@ -8,6 +10,7 @@ interface BookState {
   description: string;
   cover?: string;
   categoryId?: string;
+  categoryName?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -21,23 +24,20 @@ interface BookInsert {
 }
 
 interface BookContextState {
-  data: BookState[];
+  books: BookState[];
   insert(data: BookInsert): void;
   delete(): void;
   update(): void;
+  addFilterByCategoryId(id?: string): void;
 }
 
 const BookContext = createContext<BookContextState>({} as BookContextState);
 
 export const BookProvider: React.FC = ({ children }) => {
   const [books, setBooks] = useState<BookState[]>(() => {
-    const storagedBooks = localStorage.getItem('@MyBooks:books');
+    const listBooks = ListBooks({});
 
-    if (storagedBooks) {
-      return JSON.parse(storagedBooks);
-    }
-
-    return [] as BookState[];
+    return listBooks;
   });
 
   const insert = useCallback(
@@ -62,6 +62,12 @@ export const BookProvider: React.FC = ({ children }) => {
     [books],
   );
 
+  const addFilterByCategoryId = useCallback((categoryId) => {
+    const listBooksByCategoryId = ListBooks({ categoryId });
+
+    setBooks(listBooksByCategoryId || []);
+  }, []);
+
   const update = useCallback(() => {
     console.log('book update');
   }, []);
@@ -71,7 +77,9 @@ export const BookProvider: React.FC = ({ children }) => {
   }, []);
 
   return (
-    <BookContext.Provider value={{ data: books, insert, update, delete: del }}>
+    <BookContext.Provider
+      value={{ books, insert, update, delete: del, addFilterByCategoryId }}
+    >
       {children}
     </BookContext.Provider>
   );

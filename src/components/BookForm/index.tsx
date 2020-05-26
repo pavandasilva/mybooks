@@ -1,15 +1,14 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { Form } from '@unform/web';
 import { SubmitHandler, FormHandles } from '@unform/core';
 import * as Yup from 'yup';
 
-import IsValidImageUrl from '../../helpers/isValidImageUrl';
-
 import { Input, Select, TextArea } from '../Form';
 import { useBook } from '../../hooks/book';
 import { useBookForm } from '../../hooks/bookForm';
 import { useAlert } from '../../hooks/alert';
+import { useBookCategory } from '../../hooks/bookCategory';
 
 import {
   Container,
@@ -31,10 +30,15 @@ interface BookForm {
   title: string;
   author: string;
   description: string;
-  category?: string;
+  categoryId?: string;
   cover?: string;
   createdAt?: string;
   updatedAt?: string;
+}
+
+interface SelectOption {
+  value: string;
+  label: string;
 }
 
 const BookForm: React.FC<BookRegisterProps> = ({ dataToEdit }) => {
@@ -47,16 +51,25 @@ const BookForm: React.FC<BookRegisterProps> = ({ dataToEdit }) => {
     updatedAt: 'dsdds',
   }; */
 
-  const selectOptions = [
-    { value: 'read', label: 'Lido' },
-    { value: 'reading', label: 'Lendo' },
-    { value: 'wantToRead', label: 'Quero ler' },
-  ];
-
   const formRef = useRef<FormHandles>(null);
   const { insert } = useBook();
   const { hideBookForm } = useBookForm();
   const { showAlert } = useAlert();
+  const { categories } = useBookCategory();
+  const [selectOptions, setSelectOptions] = useState<SelectOption[]>(
+    [] as SelectOption[],
+  );
+
+  useEffect(() => {
+    const selectOptionState = categories.map((category) => {
+      return {
+        value: category.id,
+        label: category.name,
+      };
+    });
+
+    setSelectOptions(selectOptionState);
+  }, [categories]);
 
   const handleFormSubmit: SubmitHandler<BookForm> = async (data, { reset }) => {
     try {
@@ -80,9 +93,8 @@ const BookForm: React.FC<BookRegisterProps> = ({ dataToEdit }) => {
           type: 'success',
           message: 'Livro cadastrado com sucesso.',
         });
-      } catch (err) {
-        console.log(err);
-      }
+        // eslint-disable-next-line no-empty
+      } catch (err) {}
 
       /* clear form */
     } catch (err) {
@@ -146,7 +158,7 @@ const BookForm: React.FC<BookRegisterProps> = ({ dataToEdit }) => {
             />
             <Select
               options={selectOptions}
-              name="category"
+              name="categoryId"
               label="Categoria:"
             />
           </BottomContent>

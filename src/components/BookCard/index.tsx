@@ -8,7 +8,8 @@ interface BookCardProps {
     author: string;
     description: string;
     cover?: string;
-    category?: 'read' | 'reading' | 'want_read';
+    categoryId?: string;
+    categoryName?: 'read' | 'reading' | 'want_read' | string;
     updatedAt: string;
     createdAt: string;
   };
@@ -25,9 +26,9 @@ const BookCard: React.FC<BookCardProps> = ({ data }) => {
         <h1>{data.title}</h1>
         <p>{data.description}</p>
 
-        {data.category && (
-          <Label category={data.category}>
-            <span>{data.category}</span>
+        {data.categoryName && (
+          <Label category={data.categoryName}>
+            <span>{data.categoryName}</span>
           </Label>
         )}
       </RightContent>
