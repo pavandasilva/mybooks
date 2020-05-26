@@ -2,13 +2,17 @@ import React from 'react';
 import { Container } from './styles';
 
 import BookList from '../../components/BookList';
+import SubHeader from '../../components/SubHeader';
 
 const General: React.FC = () => {
   return (
-    <Container>
-      <span>Lista de livros</span>
-      <BookList />
-    </Container>
+    <>
+      <SubHeader />
+      <Container>
+        <span>Lista de livros</span>
+        <BookList />
+      </Container>
+    </>
   );
 };
 

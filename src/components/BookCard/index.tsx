@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Container, LeftContent, RightContent, Label } from './styles';
+import { Label } from '../../styles/styles';
+import { Container, LeftContent, RightContent, LinkButton } from './styles';
 
 interface BookCardProps {
   data: {
@@ -9,7 +10,7 @@ interface BookCardProps {
     description: string;
     cover?: string;
     categoryId?: string;
-    categoryName?: 'read' | 'reading' | 'want_read' | string;
+    categoryName?: string;
     updatedAt: string;
     createdAt: string;
   };
@@ -20,7 +21,14 @@ const BookCard: React.FC<BookCardProps> = ({ data }) => {
     <Container>
       <LeftContent>
         <div>{data.cover && <img src={data.cover} alt={data.title} />}</div>
-        <button type="button">MAIS INFOS</button>
+        <LinkButton
+          to={{
+            pathname: `/detail/${data.title.toLowerCase().replace(' ', '-')}`,
+            state: { ...data },
+          }}
+        >
+          MAIS INFOS
+        </LinkButton>
       </LeftContent>
       <RightContent>
         <h1>{data.title}</h1>

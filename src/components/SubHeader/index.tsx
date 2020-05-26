@@ -1,33 +1,29 @@
 import React from 'react';
-import { FaSearch, FaPlus } from 'react-icons/fa';
-
-/* import AlertModal from '../AlertModal'; */
+import { FaSearch, FaPlus, FaEdit } from 'react-icons/fa';
 import { useBookForm } from '../../hooks/bookForm';
 import { Container, BookActions, Search, BookRegister } from './styles';
 
-const SubHeader: React.FC = () => {
-  const { showBookForm } = useBookForm();
+interface SubHeaderProps {
+  mode?: 'insert' | 'update';
+}
 
-  const handleBookRegisterClick = () => {
-    console.log('handleBookRegisterClick');
-    showBookForm();
-  };
+const SubHeader: React.FC<SubHeaderProps> = ({ mode = 'insert' }) => {
+  const { showBookForm } = useBookForm();
 
   return (
     <Container>
       <BookActions>
-        <BookRegister onClick={handleBookRegisterClick}>
-          <FaPlus />
-          <span>CADASTRAR LIVRO</span>
+        <BookRegister onClick={showBookForm}>
+          {mode === 'insert' ? <FaPlus /> : <FaEdit />}
+          <span>{mode === 'insert' ? 'CADASTRAR LIVRO' : 'EDITAR LIVRO'}</span>
         </BookRegister>
-        <Search>
-          <FaSearch />
-          <input type="text" placeholder="Buscar por livros" />
-        </Search>
+        {mode === 'insert' && (
+          <Search>
+            <FaSearch />
+            <input type="text" placeholder="Buscar por livros" />
+          </Search>
+        )}
       </BookActions>
-
-      {/*  <AlertModal type="warning" body="Livro removido com sucesso." /> */}
-      {/* <BookForm /> */}
     </Container>
   );
 };

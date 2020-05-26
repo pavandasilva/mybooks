@@ -1,8 +1,5 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
-interface LabelProps {
-  category?: string;
-}
 
 export const Container = styled.div`
   display: flex;
@@ -35,25 +32,26 @@ export const LeftContent = styled.div`
       height: auto;
     }
   }
+`;
 
-  button {
-    margin-top: 20px;
-    border: none;
-    padding: 0;
-    background: none;
-    width: 95px;
-    height: 30px;
-    border-radius: 19px;
-    background-color: #ffffff;
-    border: 2px solid #676767;
-    font-size: 12px;
-    color: #676767;
+export const LinkButton = styled(Link)`
+  display: flex;
+  margin-top: 10px;
+  width: 95px;
+  height: 30px;
+  border-radius: 19px;
+  background-color: #ffffff;
+  border: 2px solid #676767;
+  font-size: 12px;
+  color: #676767;
+  text-decoration: none;
+  justify-content: center;
+  align-items: center;
 
-    &:hover {
-      transition-delay: 7ms;
-      color: #232323;
-      border-color: #232323;
-    }
+  &:hover {
+    transition-delay: 7ms;
+    color: #232323;
+    border-color: #232323;
   }
 `;
 
@@ -69,24 +67,5 @@ export const RightContent = styled.div`
     margin-top: 10px;
     max-height: 51%;
     overflow: hidden;
-  }
-`;
-
-export const Label = styled.div<LabelProps>`
-  display: flex;
-  width: 70px;
-  height: 16px;
-  background-color: red;
-  margin-top: 10px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 7px;
-  padding: 0;
-
-  span {
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    font-size: 12px;
   }
 `;
